@@ -1,35 +1,41 @@
 
 
-function Ext_Ret(Name,Extend_Time,Retract_Time,Enable)
+-- Extend / Retract Function
+function Ext_Ret(Name,Extend_Time,Retract_Time,Enable,Override)
     local Enable_Input = Enable
-	local Extend_Timer = Name.."Extend"
-	local Retract_Timer = Name.."Retract"
-	local Active_Extend,Remaining_Extend = get_timer(Extend_Timer)
-	local Active_Retract,Remaining_Retract = get_timer(Retract_Timer)
+    local Extend_Timer = Name.."Extend"
+    local Retract_Timer = Name.."Retract"
+    local Override_OS = Override
+    local Active_Extend,Remaining_Extend = get_timer(Extend_Timer)
+    local Active_Retract,Remaining_Retract = get_timer(Retract_Timer)
 	if not Fs then 
-        Fs = 1
-   		set_sVirt("Name".."State",0)
-        set_timer(Extend_Timer,Extend_Time)
-        set_timer(Retract_Timer,Retract_Time)
- 	end
+		Fs = 1
+		set_sVirt(Name.."State",0)
+		set_timer(Extend_Timer,Extend_Time)
+		set_timer(Retract_Timer,Retract_Time)
+	end
 
-    local State = get_sVirt("Name".."State",0)
+  	local State = get_sVirt("Name".."State",0)
 
-    if Enable_Input == 1 then  
-        if State == 0 then 
-            set_timer(Retract_Timer,Retract_Time) 
-            if Remaining_Extend == 0 then set_sVirt("Name".."State",2) end
-            return "Extend"
-        elseif State == 2 then 
-            set_timer(Extend_Timer,Extend_Time) 
-            if Remaining_Retract == 0 then set_sVirt("Name".."State",0) end
-            return "Retract"
-        end
-    else
-        set_timer(Retract_Timer,Retract_Time) 
-        set_timer(Extend_Timer,Extend_Time) 
-        return "Disable"
-    end
+  	if Enable_Input == 1 then  
+		if State == 0 then 
+			set_timer(Retract_Timer,Retract_Time) 
+			if Remaining_Extend == 0 or Override_OS == 1 then set_sVirt(Name.."State",2) end
+			return "Extend"
+		elseif State == 2 then 
+			set_timer(Extend_Timer,Extend_Time) 
+			if Remaining_Retract == 0 or Override_OS == 1 then set_sVirt(Name.."State",0) end
+			return "Retract"
+		end
+	else
+		set_timer(Retract_Timer,Retract_Time) 
+		set_timer(Extend_Timer,Extend_Time) 
+		if State == 0 then
+			return "Extend"
+		else
+			return "Retract"
+		end
+	end
 end
 
 -- This Section Is Only for Testing Purposes, DO NOT PUT IN REAL CODE
