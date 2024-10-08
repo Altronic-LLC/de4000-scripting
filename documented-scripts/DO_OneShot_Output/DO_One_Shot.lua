@@ -3,10 +3,6 @@
 ----------------------------
 function DigitalOutput_OneShot(Output_Terminal,Output_Number,Input)
     local Name = tostring(Output_Terminal)..tostring(Output_Number) 
-    if not get_sVirt("_"..Name.."_FS") then
-        set_sVirt("_"..Name.."_FS",1)
-    end
-
     local Terminal = Output_Terminal
     local Output = Output_Number
     local DO_Cmd = Input
