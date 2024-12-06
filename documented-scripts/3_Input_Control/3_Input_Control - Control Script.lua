@@ -30,6 +30,11 @@ local dischPIDIFactor = tonumber_def(get_gbl("dischPIDIFactor",0),0)
 local dischPIDDFactor = tonumber_def(get_gbl("dischPIDDFactor",0),0)
 
 set_sVirt("suctSp",suctSp)
+set_sVirt("suctMin",suctMin)
+set_sVirt("dischSp",dischSp)
+set_sVirt("dischMax",dischMax)
+
+
 
 local recycleCtrl = false
 local recycleSuctionRev = false
@@ -127,13 +132,16 @@ local Input3_Term = get_gbl("Input_Term",0)
 local Input3_Chan = get_gbl("Input_Chan",0)
 local Linear_High_SP = get_gbl("Linear_High_SP",0)
 local Linear_Low_SP = get_gbl("Linear_Low_SP",0)
-local Input3_Enable = get_gbl("Input3_Enable")
+local Input3_Enable = get_gbl("Input3_Enable",0)
+local Reverse_Linear_Action = get_gbl("Reverse_Linear_Action",0)
+
 
 set_sVirt("Linear_High_SP",Linear_High_SP)
 set_sVirt("Linear_Low_SP",Linear_Low_SP)
 set_sVirt("Input_Term",Input3_Term)
 set_sVirt("Input_Chan",Input3_Chan)
 set_sVirt("Input3_Enable",Input3_Enable)
+set_sVirt("Reverse_Linear_Action",Reverse_Linear_Action)
 
 
 if Input3_Enable == 1 then
@@ -142,16 +150,32 @@ if Input3_Enable == 1 then
 end
 
 if Input3 then
-	local Input3_Diff = Linear_High_SP - Linear_Low_SP
-	if Input3_Diff == 0 then Input3_Diff = 1 end
-	if Input3Val < Linear_High_SP then
-		local Input3_Err = Linear_High_SP - Input3Val
-		Input3_Pct = Input3_Err / Input3_Diff
-		if Input3_Pct > 1 then Input3_Pct = 1 end
-		if Input3_Pct < 0 then Input3_Pct = 0 end
-		Input3_Output = (1 - Input3_Pct) * 100
+	if Reverse_Linear_Action == 0 then 
+		local Input3_Diff = Linear_High_SP - Linear_Low_SP
+		if Input3_Diff == 0 then Input3_Diff = 1 end
+		if Input3Val < Linear_High_SP then
+			local Input3_Err = Linear_High_SP - Input3Val
+			Input3_Pct = Input3_Err / Input3_Diff
+			if Input3_Pct > 1 then Input3_Pct = 1 end
+			if Input3_Pct < 0 then Input3_Pct = 0 end
+			Input3_Output = (1 - Input3_Pct) * 100
+		else
+			Input3_Output = 100
+		end
 	else
-		Input3_Output = 100
+		local Input3_Diff = Linear_High_SP - Linear_Low_SP
+		if Input3_Diff == 0 then Input3_Diff = 1 end
+		if Input3Val > Linear_Low_SP then
+			local Input3_Err = Input3Val - Linear_Low_SP
+			Input3_Pct = Input3_Err / Input3_Diff
+			if Input3_Pct > 1 then Input3_Pct = 1 end
+			if Input3_Pct < 0 then Input3_Pct = 0 end
+			Input3_Output = (1 - Input3_Pct) * 100
+			set_sVirt("Input3_Pct",Input3_Pct)
+			set_sVirt("Input3_Err",Input3_Err)
+		else
+			Input3_Output = 100
+		end
 	end
 else
 	Input3_Output = 100
@@ -173,8 +197,12 @@ end
 if Input3_Output < minOutput then
 	minOutput = Input3_Output
 	set_sVirt("Winning",3)
-
 end
+
+set_sVirt("minOutput",minOutput)
+set_sVirt("suctOutput",suctOutput)
+set_sVirt("dischOutput",dischOutput)
+set_sVirt("Input3_Output",Input3_Output)
 
 
 local recycleMinOutput = minOutput
