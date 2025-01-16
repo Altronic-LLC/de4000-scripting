@@ -15,7 +15,7 @@ function Ext_Ret(Name,Extend_Time,Retract_Time,Enable,Override)
 		set_timer(Retract_Timer,Retract_Time)
 	end
 
-  	local State = get_sVirt("Name".."State",0)
+  	local State = get_sVirt(Name.."State",0)
 
   	if Enable_Input == 1 then  
 		if State == 0 then 
@@ -38,15 +38,33 @@ function Ext_Ret(Name,Extend_Time,Retract_Time,Enable,Override)
 	end
 end
 
+
 -- This Section Is Only for Testing Purposes, DO NOT PUT IN REAL CODE
-if not Andrew_FS then
-    Andrew_FS = 1
-    set_sVirt("Andrew Eanble",0)
+if not FirstScan then
+    FirstScan = 1
+    set_sVirt("Enable",1)
+    set_sVirt("Override",0)
 end
 
-local Andrew = get_sVirt("Andrew Eanble",0)
+local Enable_Function = get_sVirt("Enable",1)
+local Override_Output = get_sVirt("Override",0)
 
-Andrew_Test = Ext_Ret("Testing",10,10,Andrew)
-set_sVirt("Andrew_Test",Andrew_Test)
+
+local Poppet_1_Valve = Ext_Ret("Poppet_1",10,13,Enable_Function,Override_Output)
+
+if Poppet_1_Valve == "Extend" then
+    set_do_val(1,1,1)
+else
+    set_do_val(1,1,0)
+end
+
+
+local Poppet_2_Valve = Ext_Ret("Poppet_2",5,5,Enable_Function,Override_Output)
+
+if Poppet_2_Valve == "Retract" then
+    set_do_val(1,2,1)
+else
+    set_do_val(1,2,0)
+end
 
 

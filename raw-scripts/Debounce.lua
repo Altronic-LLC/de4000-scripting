@@ -4,12 +4,14 @@
 
 if not firstcan then
 	firstcan = 1
-	set_sVirt("Channel",0)
-
-
+	set_sVirt("Channel1",0)
+	set_sVirt("Channel2",1)
 end
 
-function Debounce(Channel,On_Time,Off_Time,Var_Name)
+set_channel_val(1,1,get_sVirt("Channel1",0))
+set_channel_val(1,2,get_sVirt("Channel2",1))
+
+function DI_Debounce(Channel,On_Time,Off_Time,Var_Name)
 	local On_Timer = Var_Name.."On"
 	local Off_Timer = Var_Name.."Off"
 	local Active_On,Remaining_On = get_timer(On_Timer)
@@ -31,16 +33,8 @@ end
 
 
 
-Debounce(get_sVirt("Channel"),10,10,"andrew_test")
-local RRRRRR = get_sVirt("andrew_test")
-set_sVirt("RRRRRR",RRRRRR)
+DI_Debounce(get_channel_val(1,1),10,10,"Input1_Debounce")
+local Input1_Debounce = get_sVirt("Input1_Debounce")
 
-Debounce(get_channel_val(3,29),2,2,"Start_Stop")
-local StartStop = get_sVirt("Start_Stop")
-
-
-
-
-
-
-
+DI_Debounce(get_channel_val(1,2),2,2,"Input2_Debounce")
+local Input2 = get_sVirt("Input2_Debounce")
