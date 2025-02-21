@@ -1,14 +1,11 @@
 ----------------------------
--- Digital Output Function --
--- Name = Enter The Name Of The Output In Parenthesis 
--- Output_Terminal = Terminal Board Number For Digital Output
--- Output_Number = Output Number For The Digital Output
--- Normally_Closed = 0 = Normally Open, 1 = Normally Closed
+-- Rev 1.0 - Initial Release
 ----------------------------
+
 function DO_Manual_ON_OFF(Name,Output_Terminal,Output_Number,Normally_Closed)
     local Normally_Closed_Input = Normally_Closed
     if not get_sVirt("_"..Name.."_FS") then
-        set_sVirt("_"..Name.."_FS",1)
+        set_sVirt("_"..Name.."_FS",1)   `
         if Normally_Closed_Input == 1 then set_sVirt(Name.." Command","Close") else set_sVirt(Name.." Command","Open") end
         set_sVirt(Name.." Control",0)
     end

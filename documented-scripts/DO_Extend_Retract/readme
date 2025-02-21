@@ -1,0 +1,21 @@
+Description: Creating a Digital Output For Automatic Extend and Retract 
+
+Rev 1.0 - Initial Release 2/21/2025
+
+
+Code Reference:
+----------------------------
+-- Digital Output Extend Retract Function --
+-- Name = Enter The Name Of The Output In Parenthesis 
+-- Extend_Time = Amount Of Time For Valve To Stay Extended
+-- Retract_Time = Amount Of Time For Valve To Stay Retracted
+-- Enable = Variable That Starts The Automatic Extend/Retract
+-- Override = Variable used to force switch before time has expired for switching (NEEDS TO BE ONESHOT OR ELSE WILL OUTPUT WILL CONSTANTLY SWITCH)
+----------------------------
+Ext_Ret(Name,Extend_Time,Retract_Time,Enable,Override)
+
+local Poppet_1_Valve = DO_Ext_Ret("Poppet_1",10,13,Enable_Function,Override_Output)  -- Example 1: "Poppet_1" = Name "User Enterable",  10 = Amount Of Time For Valve To Stay Extended, 13 = Amount Of Time For Valve To Stay Retracted, Enable_Function = Variable That Starts The Automatic Extend/Retract, Override_Output = Variable used to force switch before time has expired for switching (NEEDS TO BE ONESHOT OR ELSE WILL OUTPUT WILL CONSTANTLY SWITCH)
+
+
+local Poppet_2_Valve = DO_Ext_Ret("Poppet_2",5,5,Enable_Function,Override_Output)  -- Example 2: "Poppet_2" = Name "User Enterable",  5 = Amount Of Time For Valve To Stay Extended, 5 = Amount Of Time For Valve To Stay Retracted, Enable_Function = Variable That Starts The Automatic Extend/Retract, Override_Output = Variable used to force switch before time has expired for switching (NEEDS TO BE ONESHOT OR ELSE WILL OUTPUT WILL CONSTANTLY SWITCH)
+

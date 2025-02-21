@@ -1,0 +1,19 @@
+Description: Creating a Auto/Manual/OneShot Digital Output.
+
+Rev 1.0 - Initial Release 2/21/2025
+
+
+Code Reference:
+----------------------------
+-- Digital Auto/Manual/Oneshot Output Function --
+-- Digital Output Function --
+-- Name = Enter The Name Of The Output In Parenthesis 
+-- Output_Terminal = Terminal Board Number For Digital Output
+-- Output_Number = Output Number For The Digital Output
+-- Normally_Closed = 0 = Normally Open, 1 = Normally Closed
+----------------------------
+DO_Manual_ON_OFF(Name,Output_Terminal,Output_Number,Normally_Closed)
+
+DO_Manual_ON_OFF("Blowdown",1,6,0) -- Example "Blowdown" = NAME, 1 = Output Terminal, 6 = Output Number, 0 = Normally_Open
+
+DO_Manual_ON_OFF("Bypass",1,3,1) -- Example "Bypass" = NAME, 1 = Output Terminal, 3 = Output Number, 1 = Normally_Closed

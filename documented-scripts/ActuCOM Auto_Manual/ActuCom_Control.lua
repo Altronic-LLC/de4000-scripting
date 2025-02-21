@@ -1,3 +1,7 @@
+----------------------------
+-- Rev 1.0 - Initial Release
+----------------------------
+
 -----------------------------
 -- Actucom Control
 -----------------------------
@@ -17,7 +21,7 @@ if ActuCom_Enable_Cmd ~= ActuCom_Enable_Cmd_Last then
     ActuCom_Enable_Output = ActuCom_Enable_Cmd
     ActuCom_Enable_Cmd_Last = ActuCom_Enable_Cmd
 end
-set_do_val(2,1,ActuCom_Enable_Cmd) 
+set_do_val(1,1,ActuCom_Enable_Cmd) -- Set the terminal board, and output number for the ENABLE command digital output
 
 if get_state() >= ActuCom_Enable then 
     ActuCom_Enable_Cmd = 1
@@ -30,14 +34,14 @@ if ActuCom_Raise_Cmd ~= ActuCom_Raise_Cmd_Last then
     ActuCom_Raise_Output = ActuCom_Raise_Cmd
     ActuCom_Raise_Cmd_Last = ActuCom_Raise_Cmd
 end
-set_do_val(2,2,ActuCom_Raise_Cmd) 
+set_do_val(1,2,ActuCom_Raise_Cmd) -- Set the terminal board, and output number for the RAISE command digital output
 
     -- ActuCom Lower Command
 if ActuCom_Lower_Cmd ~= ActuCom_Lower_Cmd_Last then
     ActuCom_Lower_Output = ActuCom_Lower_Cmd
     ActuCom_Lower_Cmd_Last = ActuCom_Lower_Cmd
 end
-set_do_val(2,3,ActuCom_Lower_Cmd) 
+set_do_val(1,3,ActuCom_Lower_Cmd) -- Set the terminal board, and output number for the LOWER command digital output
 
 
 -- Manual Speed Control
@@ -48,9 +52,7 @@ local dRPM = get_sVirt("Speed Target",0)
 set_sVirt("Desired RPM",dRPM)
 
 if get_sVirt("ManualSpeedBump",0) ~= 0 then
-  local si = 25 -- Default SpeedIncrement if no parameter has been created
-  local sip = get_param("SpeedIncrement",0)
-  if sip ~= 0 then si = sip end
+  local si = get_param("SpeedIncrement",0)
   local manSpeed = get_sVirt("ManualSpeed",0)
   manSpeed = manSpeed + (si * get_sVirt("ManualSpeedBump",0))
   set_sVirt("ManualSpeed",tostring(math.floor(manSpeed)))

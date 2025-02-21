@@ -1,0 +1,18 @@
+Description: Creating a Digital Input Debounce Timer.
+
+Rev 1.0 - Initial Release 2/21/2025
+
+
+Code Reference:
+----------------------------
+-- Digital Input Debounce Function --
+-- Name = Enter The Name Of The Output In Parenthesis 
+-- Channel = Input Channel 
+-- On_Time = When Channel Is HIGH, Debounce Time
+-- Off_Time = When Channel Is LOW, Debounce Time
+----------------------------
+DI_Debounce(Name,Channel,On_Time,Off_Time)
+
+local Input1_Debounce = DI_Debounce("Input1_Debounce",get_channel_val(1,1),10,10) -- Example 1: "Input1_Debounce" = Name "User Enterable",  Channel = Input Channel, 10 = When Channel Is HIGH, Debounce Time, 10 = When Channel Is LOW, Debounce Time
+
+local Input2_Debounce = DI_Debounce("Input2_Debounce",get_channel_val(1,2),2,4) -- Example 1: "Input2_Debounce" = Name "User Enterable",  Channel = Input Channel, 2 = When Channel Is HIGH, Debounce Time, 4 = When Channel Is LOW, Debounce Time
