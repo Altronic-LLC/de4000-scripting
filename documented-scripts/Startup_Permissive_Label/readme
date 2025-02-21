@@ -1,0 +1,13 @@
+Description: Will Display what Permissive the system is waiting on, while in startup.
+
+Rev 1.0 - Initial Release 02/21/2025
+
+
+Example Code:
+----------------------------
+-- Startup Permissive Label --
+-- User needs to put in the function and function call. Code will automatically create the ("STATE_PERMISSIVE") HMI for user to put on dashboard
+----------------------------
+
+
+

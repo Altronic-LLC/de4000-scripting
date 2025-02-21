@@ -2,14 +2,14 @@
 -- Rev 1.0 - Initial Release
 ----------------------------
 
-function MomentaryPB(Name,Terminal_Board,Output_Number,On_Time)
+function PB_Momentary(Name,Terminal_Board,Output_Number)
     if not get_sVirt(Name.." PB") then
         set_sVirt(Name.." PB","Off")
     end
 
     local Terminal = Terminal_Board
     local Output = Output_Number
-    local Time = On_Time
+    local Time = .5
     local active,remaining = get_timer(Name.."TMR")
     checkToggle(Name.." PB","Off","On")
 
@@ -28,7 +28,7 @@ function MomentaryPB(Name,Terminal_Board,Output_Number,On_Time)
     end
 end
 
-MomentaryPB("VFD Reet",1,2,3) -- This example "VFD RESET" = Name (User Enterable), 1 = Terminal_Board, 2 = Output_Number, 3 = On_Time (In Seconds)
+PB_Momentary("VFD Reet",1,2) -- This example "VFD RESET" = Name (User Enterable), 1 = Terminal_Board, 2 = Output_Number
 
 
 

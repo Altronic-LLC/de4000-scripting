@@ -13,7 +13,7 @@ local State = get_state()
 if State == 0 then Load_State = 0 end
 
 if State == 7 then 
-    if get_gbl("perm7aEnabled",0) > 0 then 
+    if get_gbl("perm7aEnabled",0) > 0 then -- User To Enter State, and what permissive to use for Load Button to become active.
         if get_sVirt("permissive_met","none") == "B not met" then Load_State = 1 end
     else
         Load_State = 1
@@ -47,5 +47,9 @@ else
     set_sVirt("Load Status","Not Ready(#FB2103)")
     set_sVirt("Load_Complete",0)
 end
+
+
+-- Section On For Example Json
+set_sVirt("PUSH START TO BEGIN","PUSH START")
       
     

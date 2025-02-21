@@ -1,0 +1,16 @@
+Description: Creating a Winning Digital Input, compares two inputs and uses the value of the biggest input channel.
+
+Rev 1.0 - Initial Release 2/21/2025
+
+
+Code Reference:
+----------------------------
+-- Digital Input Channels Greater Than Winner --
+-- Input1 =
+-- Input2 =
+----------------------------
+DI_Exceeding(Input1,Input2)
+
+DI_Exceeding(get_channel_val(1,1),get_channel_val(1,2)) -- Example: get_channel_val(1,1) = First Analog Input Channel, get_channel_val(1,2) = Second Analog Input Channel
+
+

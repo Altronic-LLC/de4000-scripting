@@ -1,0 +1,16 @@
+Description: Creating a Load HMI button and status. 
+
+Rev 1.0 - Initial Release 2/21/2025
+
+
+Code Reference:
+----------------------------
+-- Digital Input Debounce Function --
+-- User edits commented areas of code to set State/permissive letter.
+-- In Example HMI Start-Up dashboard
+	* In State 7, Permissive B shows how to set startup sequence for the Load button.
+	* User can set this permissive for any state (NOT STATE 0), and either permissive A or B.
+-- In Example
+	* Push Start button
+	* Once The Load Status turns yellow and shows "Ready To Load", user presses LOAD CONTROL toggle button to load unit.
+----------------------------
