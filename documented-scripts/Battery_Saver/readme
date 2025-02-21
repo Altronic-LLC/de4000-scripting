@@ -7,6 +7,7 @@ Example Code:
 ----------------------------
 -- Startup Permissive Label --
 -- User needs to put in the function and function call. Code will automatically create the ("STATE_PERMISSIVE") HMI for user to put on dashboard
+-- If not faults present, output will be energized, when a fault is present the countdown timer begins, once this timer expires the output will DE-energize.
 ----------------------------
 
 
