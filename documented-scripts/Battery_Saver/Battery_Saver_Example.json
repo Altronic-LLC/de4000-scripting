@@ -1,5 +1,5 @@
 {
-  "dashboardcfg": "{\"pages\":[{\"rows\":[[{\"type\":\"value\"},{\"type\":\"value\"}],[{\"type\":\"led\",\"id\":\"t1:do5\"}]]}]}",
+  "dashboardcfg": "{\"pages\":[{\"rows\":[[{\"type\":\"value\"},{\"type\":\"value\"}],[{\"type\":\"led\",\"id\":\"t1:do5\"},{\"type\":\"value\",\"id\":\"sgbl:BatterySaverTimer\"}]]}]}",
   "externalDevices": "[]",
   "gbl": {
     "trendschannels": "t1:in1,t1:in2,t1:in3,t1:in4,t1:in5,t1:in6,t1:in7,t1:in8,t1:in9",
