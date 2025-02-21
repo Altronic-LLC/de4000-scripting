@@ -5,8 +5,9 @@ Rev 1.0 - Initial Release 02/21/2025
 
 Example Code:
 ----------------------------
--- Startup Permissive Label --
--- User needs to put in the function and function call. Code will automatically create the ("STATE_PERMISSIVE") HMI for user to put on dashboard
+-- Battery Saver Function --
+-- User needs to put in the function and function call. Code will automatically create the parameters needed.
+-- User then enters the battery saver output and time in the HMI parameters page.
 ----------------------------
 
 

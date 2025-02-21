@@ -1,5 +1,5 @@
 {
-  "dashboardcfg": "{\"pages\":[{\"rows\":[[{\"type\":\"led\",\"id\":\"t1:do5\"},{\"type\":\"value\",\"id\":\"sgbl:BatterySaverTimer\"}]]}]}",
+  "dashboardcfg": "{\"pages\":[{\"rows\":[[{\"type\":\"value\"},{\"type\":\"value\"}],[{\"type\":\"led\",\"id\":\"t1:do5\"}]]}]}",
   "externalDevices": "[]",
   "gbl": {
     "trendschannels": "t1:in1,t1:in2,t1:in3,t1:in4,t1:in5,t1:in6,t1:in7,t1:in8,t1:in9",
@@ -299,11 +299,13 @@
     "FaultRevAct": 0,
     "tableMode": "create",
     "refreshFrq": 0.5,
-    "appVer": "3.0.1",
+    "appVer": "3.0.3",
     "overrideDO": false,
-    "JSONVer": "1.0"
+    "JSONVer": "1.0",
+    "p_Battery_Saver_Output_Output": "5",
+    "p_Battery_Saver_Delay": "1"
   },
-  "scripts": "{\"customerScript\":\"-----------------------------------------------------  \\n--BatterySaver\\n-----------------------------------------------------  \\nif not Battery_Saver_FS then \\n    Battery_Saver_FS = 1\\n    create_param(\\\"Battery_Saver_Delay\\\",10,\\\"BatterySaver Shutoff Control\\\",\\\"Enter BatterySaver Shutoff Delay Time (0-9999min)\\\")\\n    create_param(\\\"Battery_Saver_Output_Terminal\\\",1,\\\"BatterySaver Shutoff Control\\\",\\\"Enter The Terminal Board The Battery Saver Output Is On\\\")\\n    create_param(\\\"Battery_Saver_Output_Output\\\",5,\\\"BatterySaver Shutoff Control\\\",\\\"Enter The Output Number The Battery Saver Output Is On\\\")\\nend\\n\\nlocal Battery_Saver_Delay = get_param(\\\"Battery_Saver_Delay\\\") * 60\\nlocal Battery_Saver_Output_Terminal = get_param(\\\"Battery_Saver_Output_Terminal\\\",0)\\nlocal Battery_Saver_Output_Output = get_param(\\\"Battery_Saver_Output_Output\\\",0)\\nlocal Output_Status = get_do_val(Battery_Saver_Output_Terminal,Battery_Saver_Output_Output) \\n\\nif Battery_Saver_Cmd ~= Battery_Saver_Cmd_Last then\\n\\tBattery_Saver_Output = Battery_Saver_Cmd\\n\\tBattery_Saver_Cmd_Last = Battery_Saver_Cmd\\nend\\nset_do_val(1, 5,Battery_Saver_Output) \\n\\n\\nif tonumber(get_firstFault(\\\"flag\\\")) ~= 1 then  -- fault output adjust to match your confirguration\\n    Battery_Saver_Cmd = 1 -- power output adjust to match your configuration\\nend\\nif tonumber(get_firstFault(\\\"flag\\\")) ~= 1 and Output_Status == 1 then\\n    set_timer(\\\"BatterySaverTimer\\\",Battery_Saver_Delay) -- keeps resetting timer as long as there are no faults\\nend\\nif tonumber(get_firstFault(\\\"flag\\\")) == 1 and Output_Status == 1 then\\n    if not get_timer(\\\"BatterySaverTimer\\\") then -- wait for timer to complete then turn output off\\n\\t\\tBattery_Saver_Cmd = 0\\n    end\\nend\\n\\nlocal bsl,bst = get_timer(\\\"BatterySaverTimer\\\")\\nset_sVirt(\\\"BatterySaverTimer\\\",bst)\\n\\n-----------------------------------------------------  \\n--END BatterySaver\\n-----------------------------------------------------  \\n\\n----------------------------\\n-- Digital Output Function --\\n-- Output_Terminal = Terminal Board Number For Digital Output\\n-- Output_Number = Output Number For The Digital Output\\n-- Delay = Enter The Output Number The Battery Saver Output Is On In Minutes\\n----------------------------\\n\\nfunction Battery_Saver(Output_Terminal,Output_Number,Delay)\\n    if not Battery_Saver_FS then \\n        Battery_Saver_FS = 1\\n        create_param(\\\"Battery_Saver_Delay\\\",10,\\\"BatterySaver Shutoff Control\\\",\\\"Enter BatterySaver Shutoff Delay Time (0-9999min)\\\")\\n        create_param(\\\"Battery_Saver_Output_Terminal\\\",1,\\\"BatterySaver Shutoff Control\\\",\\\"Enter The Terminal Board The Battery Saver Output Is On\\\")\\n        create_param(\\\"Battery_Saver_Output_Output\\\",5,\\\"BatterySaver Shutoff Control\\\",\\\"Enter The Output Number The Battery Saver Output Is On\\\")\\n    end\\n    \\n    local Battery_Saver_Delay = Delay * 60\\n    local Battery_Saver_Output_Terminal = Output_Terminal\\n    local Battery_Saver_Output_Output = Output_Number\\n    local Output_Status = get_do_val(Battery_Saver_Output_Terminal,Battery_Saver_Output_Output) \\n    \\n    if Battery_Saver_Cmd ~= Battery_Saver_Cmd_Last then\\n        Battery_Saver_Output = Battery_Saver_Cmd\\n        Battery_Saver_Cmd_Last = Battery_Saver_Cmd\\n    end\\n    set_do_val(Battery_Saver_Output_Terminal,Battery_Saver_Output_Output,Battery_Saver_Output) \\n    \\n    \\n    if tonumber(get_firstFault(\\\"flag\\\")) ~= 1 then  -- fault output adjust to match your confirguration\\n        Battery_Saver_Cmd = 1 -- power output adjust to match your configuration\\n    end\\n    if tonumber(get_firstFault(\\\"flag\\\")) ~= 1 and Output_Status == 1 then\\n        set_timer(\\\"BatterySaverTimer\\\",Battery_Saver_Delay) -- keeps resetting timer as long as there are no faults\\n    end\\n    if tonumber(get_firstFault(\\\"flag\\\")) == 1 and Output_Status == 1 then\\n        if not get_timer(\\\"BatterySaverTimer\\\") then -- wait for timer to complete then turn output off\\n            Battery_Saver_Cmd = 0\\n        end\\n    end\\n    \\n    local bsl,bst = get_timer(\\\"BatterySaverTimer\\\")\\n    set_sVirt(\\\"BatterySaverTimer\\\",bst)\\n\\nend\\n\\nBattery_Saver(1,5,2)  -- Example 1 = Output Terminal, 3 = Output Number, 2 = Delay of 2 Minutes\"}",
+  "scripts": "{\"customerScript\":\"----------------------------\\n-- Rev 1.0 - Initial Release\\n----------------------------\\n\\n----------------------------\\n-- Digital Output Function --\\n-- Output_Terminal = Terminal Board Number For Digital Output\\n-- Output_Number = Output Number For The Digital Output\\n-- Delay = Enter The Output Number The Battery Saver Output Is On In Minutes\\n----------------------------\\nfunction Battery_Saver()\\n    if not Battery_Saver_FS then \\n        Battery_Saver_FS = 1\\n        create_param(\\\"Battery_Saver_Delay\\\",10,\\\"BatterySaver Shutoff Control\\\",\\\"Enter BatterySaver Shutoff Delay Time (0-9999min)\\\")\\n        create_param(\\\"Battery_Saver_Output_Terminal\\\",1,\\\"BatterySaver Shutoff Control\\\",\\\"Enter The Terminal Board The Battery Saver Output Is On\\\")\\n        create_param(\\\"Battery_Saver_Output_Output\\\",5,\\\"BatterySaver Shutoff Control\\\",\\\"Enter The Output Number The Battery Saver Output Is On\\\")\\n    end\\n    \\n    local Battery_Saver_Delay = get_param(\\\"Battery_Saver_Delay\\\",10) * 60\\n    local Battery_Saver_Output_Terminal = get_param(\\\"Battery_Saver_Output_Terminal\\\",1)\\n    local Battery_Saver_Output_Output = get_param(\\\"Battery_Saver_Output_Output\\\",5)\\n    local Output_Status = get_do_val(Battery_Saver_Output_Terminal,Battery_Saver_Output_Output) \\n    \\n    if Battery_Saver_Cmd ~= Battery_Saver_Cmd_Last then\\n        Battery_Saver_Output = Battery_Saver_Cmd\\n        Battery_Saver_Cmd_Last = Battery_Saver_Cmd\\n    end\\n    set_do_val(Battery_Saver_Output_Terminal,Battery_Saver_Output_Output,Battery_Saver_Output) \\n    \\n    \\n    if tonumber(get_firstFault(\\\"flag\\\")) ~= 1 then  -- fault output adjust to match your confirguration\\n        Battery_Saver_Cmd = 1 -- power output adjust to match your configuration\\n    end\\n    if tonumber(get_firstFault(\\\"flag\\\")) ~= 1 and Output_Status == 1 then\\n        set_timer(\\\"BatterySaverTimer\\\",Battery_Saver_Delay) -- keeps resetting timer as long as there are no faults\\n    end\\n    if tonumber(get_firstFault(\\\"flag\\\")) == 1 and Output_Status == 1 then\\n        if not get_timer(\\\"BatterySaverTimer\\\") then -- wait for timer to complete then turn output off\\n            Battery_Saver_Cmd = 0\\n        end\\n    end\\n    \\n    local bsl,bst = get_timer(\\\"BatterySaverTimer\\\")\\n    set_sVirt(\\\"BatterySaverTimer\\\",bst)\\n\\nend\\n\\nBattery_Saver() \\n\"}",
   "valves": "{}",
   "t1:sp1": {
     "PPRev": "60",
@@ -455,7 +457,10 @@
     "Type": "0",
     "isEnergizedOpen": "0",
     "GaugeHiInt": "1",
-    "GaugeLoInt": "0"
+    "GaugeLoInt": "0",
+    "Label": "",
+    "HiStandbyVal": "",
+    "LoStandbyVal": ""
   },
   "t1:do4": {
     "ActMode": "1",
@@ -469,7 +474,7 @@
     "Sensor": "0",
     "Type": "0",
     "isEnergizedOpen": "1",
-    "Label": "BATTERY SAVER",
+    "Label": "Battery Saver",
     "GaugeHiInt": "1",
     "GaugeLoInt": "0",
     "HiStandbyVal": "",
@@ -543,7 +548,9 @@
     "CalLoRawUser": "0",
     "CalHiRawUser": "5",
     "GaugeLoInt": "0",
-    "GaugeHiInt": "100"
+    "GaugeHiInt": "100",
+    "HiStandbyVal": "",
+    "LoStandbyVal": ""
   },
   "t1:in2": {
     "CalLoRaw": "0",
