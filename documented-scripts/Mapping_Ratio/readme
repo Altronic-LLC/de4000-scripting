@@ -1,0 +1,25 @@
+Description: The mapping ratio is the proportion between an input value and its corresponding output value in a transformation or mapping process. Take channel or variable input and output a corresponding output.
+
+Rev 1.0 - Initial Release 02/28/2025
+
+
+Example Code:
+----------------------------
+-- Maps a number from one range to another:
+-- [in_min, in_max] -> [out_min, out_max] 
+-- Input = Enter Channel To Get The Process Varible From
+-- input_Minimum = Enter The Number For The Minimum Input Value
+-- Input_Maximum = Enter The Number For The Maximum Input Value
+-- Output_Minimum = Enter The Number For The Output Value Equal To The Minimum Input Value
+-- Out_Maximum = Enter The Number For The Output Value Equal To The Maximum Input Value
+----------------------------
+map(Input,input_Minimum,Input_Maximum,Output_Minimum,Output_Maximum)
+
+local Suction_Prs_Mapped = map(get_channel_val(1,1),450,950,0,100) -- This example: get_channel_val(1,1) = Input, 450 = input_Minimum, 950 = input_Maximum, 0 = Output_Minimum, 100 = Output_Maximum
+
+local Side_Stream_Temp_Mapped = map(get_channel_val(1,5),0,1600,850,1250) -- This example: get_channel_val(1,5) = Input, 0 = input_Minimum, 1600 = input_Maximum, 850 = Output_Minimum, 1250 = Output_Maximum
+
+
+
+
+
