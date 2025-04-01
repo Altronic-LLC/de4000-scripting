@@ -120,9 +120,9 @@ if not FirstScan then
   
 	  local output = 0
 	  if revact > 0 then
-          output = pidMax + (output2 - pidMin)*(pidMin - pidMax)/(pidMax - pidMin)
+		output = output2
 	  else
-		  output = output2
+      	output = pidMax + (output2 - pidMin)*(pidMin - pidMax)/(pidMax - pidMin)
 	  end
   
 	  output = output + (proportional)
@@ -131,12 +131,12 @@ if not FirstScan then
     
 	  output = math.max(math.min(output, pidMax), pidMin)
   
-	  if revact > 0 then
-          output = pidMax + (output - pidMin)*(pidMin - pidMax)/(pidMax - pidMin)
+	  if revact == 0 then
+        output = pidMax + (output - pidMin)*(pidMin - pidMax)/(pidMax - pidMin)
       end
 
 	  if override > -1 then
-		  output = override
+		output = override
 	  end
   
 	  lastErr = err
