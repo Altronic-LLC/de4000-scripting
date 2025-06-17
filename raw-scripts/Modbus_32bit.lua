@@ -287,3 +287,36 @@ for termIndex = 1,5 do
     chInc = chInc + 1
   end
 end
+
+
+
+-- Another 32 Bit script seperate from anything above this right now
+--here is a function that you can copy and paste and just use that will use node 0 as the default to set the node 200 modbus table if you want to go this route instead.
+
+function set_modbus32_n200(start,v,block,node)
+  if not start then return 0 end
+  if not v then return 0 end
+  local r1,r2 = float32to16(v)
+  if not block then block = 4 end
+  local haveNode = true
+  if not tonumber(node) then
+    local node = 0
+    if not tonumber(node) then
+      haveNode = false
+    else
+      reg = "n"..node.."a"..(start - 1)
+      reg2 = "n"..node.."a"..(start)
+    end
+  else
+    reg = "n"..math.floor(tonumber(node * 1)).."a"..(start - 1)
+    reg2 = "n"..math.floor(tonumber(node * 1)).."a"..(start)
+  end
+  if haveNode then
+    redis.call("hmset","mod"..block,reg,r1,reg2,r2)
+  end
+end 
+
+--[[Anytime you want to set node 200 registers pass 0 as the node number and this should work.
+give it a try and let me know. - Thanks ]]
+
+set_modbus32(7777, psv*1000, 4, 0)
