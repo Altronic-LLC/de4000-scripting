@@ -4,46 +4,51 @@
 
 if not Slide_FS then
   Slide_FS = 1
+  
 
-  create_param("Load_Valve_On_Time",1,"Slide Valve","Enter Load Valve on Time in Auto Mode (in sec)")
-  create_param("Load_Valve_Off_Time",10,"Slide Valve","Enter Load Valve off Time in Auto Mode (in sec)")
-  create_param("Unload_Valve_On_Time",1,"Slide Valve","Enter Unload Valve on Time in Auto Mode (in sec)")
-  create_param("Unload_Valve_Off_Time",10,"Slide Valve","Enter Unload Valve off Time in Auto Mode (in sec)")
-  create_param("Fast_Load_Valve_On_Time",3,"Slide Valve","Enter Load Valve on Time in Manual Mode (in sec)")
-  create_param("Fast_Load_Valve_Off_Time",10,"Slide Valve","Enter Load Valve off Time in Manual Mode (in sec)")
-  create_param("Fast_Unload_Valve_On_Time",3,"Slide Valve","Enter Unload Valve on Time in Manual Mode (in sec)")
-  create_param("Fast_Unload_Valve_Off_Time",10,"Slide Valve","Enter Unload Valve off Time in Manual Mode (in sec)")
-  create_param("Control_Deadband",0.1,"Slide Valve","Enter Deadband for the Slide Valve Control PDIC-101")
-  create_param("Dis_Press_Deadband",1,"Slide Valve","Enter Deadband for the Discharge Pressure Control")
+  create_param("Load_Valve_On_Time",1,"Slide Valve","Enter Load Valve on Time Pulse in Auto Mode (in sec)")
+  create_param("Load_Valve_Off_Time",10,"Slide Valve","Enter Load Valve off Time Pulse in Auto Mode (in sec)")
+  create_param("Unload_Valve_On_Time",1,"Slide Valve","Enter Unload Valve on Time Pulse in Auto Mode (in sec)")
+  create_param("Unload_Valve_Off_Time",10,"Slide Valve","Enter Unload Valve off Time Pulse in Auto Mode (in sec)")
+  create_param("Fast_Load_Valve_On_Time",5,"Slide Valve","Enter Load Valve on Time Pulse in Manual Mode (in sec)")
+  create_param("Fast_Load_Valve_Off_Time",10,"Slide Valve","Enter Load Valve off Time Pulse in Manual Mode (in sec)")
+  create_param("Fast_Unload_Valve_On_Time",5,"Slide Valve","Enter Unload Valve on Time Pulse in Manual Mode (in sec)")
+  create_param("Fast_Unload_Valve_Off_Time",10,"Slide Valve","Enter Unload Valve off Time Pulse in Manual Mode (in sec)")
+  create_param("Ctrl_Pri_Deadband",0.1,"Slide Valve","Enter Deadband for the Primary Slide Valve Control")
+  create_param("Ctrl_Sec_Deadband",1,"Slide Valve","Enter Deadband for the Secondary Slide Valve Control")
+  
 
 end
 
-local Load_Valve_On_Time = 1000 * get_param("Load_Valve_On_Time",0)
-local Load_Valve_Off_Time = get_param("Load_Valve_Off_Time",0)
-local Unload_Valve_On_Time = 1000 * get_param("Unload_SV_On_Time",0)
-local Unload_Valve_Off_Time = get_param("Unload_Valve_Off_Time",0)
-local Fast_Load_Valve_On_Time = 1000 * get_param("Fast_Load_Valve_On_Time",0)
-local Fast_Load_Valve_Off_Time = get_param("Fast_Load_Valve_Off_Time",0)
-local Fast_Unload_Valve_On_Time = 1000 * get_param("Fast_Unload_Valve_On_Time",0)
-local Fast_Unload_Valve_Off_Time = get_param("Fast_Unload_Valve_Off_Time",0)
-local Control_Deadband = get_param("Control_Deadband",0)
-local Dis_Press_Deadband = get_param("Dis_Press_Deadband",0)
 
-local Comp_Dsch_Prs_SP = get_sVirt("Comp_Dsch_Prs_SP",0)
+local Load_Valve_On_Time = tonumber(1000 * get_param("Load_Valve_On_Time",0))
+local Load_Valve_Off_Time = tonumber(get_param("Load_Valve_Off_Time",0))
+local Unload_Valve_On_Time = tonumber(1000 * get_param("Unload_Valve_On_Time",0))
+local Unload_Valve_Off_Time = tonumber(get_param("Unload_Valve_Off_Time",0))
+local Fast_Load_Valve_On_Time = tonumber(1000 * get_param("Fast_Load_Valve_On_Time",0))
+local Fast_Load_Valve_Off_Time = tonumber(get_param("Fast_Load_Valve_Off_Time",0))
+local Fast_Unload_Valve_On_Time = tonumber(1000 * get_param("Fast_Unload_Valve_On_Time",0))
+local Fast_Unload_Valve_Off_Time = tonumber(get_param("Fast_Unload_Valve_Off_Time",0))
+local Ctrl_Pri_Deadband = get_param("Ctrl_Pri_Deadband",0)
+local Ctrl_Sec_Deadband = get_param("Ctrl_Sec_Deadband",0)
+
+local Ctrl_Pri_SP = get_do_val(1,1) -- set to correct input channel
+local Ctrl_Sec_SP = get_do_val(1,2) -- set to correct input channel
+
 
 -------------------------------------------------------------------------
 --  Determine Upper and Lower Deadband for Auto Control of Slide Valve
---  Primary - Differential Pressure
---  Secondary - Comp Discharge Pressure
+--  Primary
+--  Secondary
 -------------------------------------------------------------------------
 
-local DiffPress_Half_DB = Control_Deadband / 2
-local DiffPress_Low_DB_SP = DiffPress_SP - DiffPress_Half_DB
-local DiffPress_High_DB_SP = DiffPress_SP + DiffPress_Half_DB
+local Ctrl_Half_DB = Control_Deadband / 2
+local Ctrl_Low_DB_SP = Ctrl_SP - Ctrl_Half_DB
+local Ctrl_High_DB_SP = Ctrl_SP + Ctrl_Half_DB
 
-local Dis_Press_Half_Deadband = Dis_Press_Deadband / 2
-local Dis_Press_Low_DB_SP = Comp_Dsch_Prs_SP - Dis_Press_Half_Deadband
-local Dis_Press_High_DB_SP = Comp_Dsch_Prs_SP + Dis_Press_Half_Deadband
+local Ctrl_Sec_Half_Deadband = Ctrl_Sec_Deadband / 2
+local Ctrl_Sec_Low_DB_SP = Ctrl_Sec_SP - Ctrl_Sec_Half_Deadband
+local Ctrl_Sec_High_DB_SP = Ctrl_Sec_SP + Ctrl_Sec_Half_Deadband
 
 
 ----------------------------------------------------- 
@@ -61,7 +66,7 @@ end
 ------------------------------------------------------------------------- 
 
 if SV_Auto_Control == 1 then
-  if PT_102 < Dis_Press_Low_DB_SP or PT_102 > Dis_Press_High_DB_SP then
+  if Ctrl_Sec < Ctrl_Sec_Low_DB_SP or Ctrl_Sec > Ctrl_Sec_High_DB_SP then
     Override = 1
   else
     Override = 0
@@ -76,19 +81,19 @@ end
 
 if Man_Mode == 0 and SV_Auto_Control == 1 then
   if Override == 0 then
-    if DiffPress > DiffPress_Low_DB_SP and DiffPress < DiffPress_High_DB_SP then 
+    if Ctrl_Pri > Ctrl_Low_DB_SP and Ctrl_Pri < Ctrl_High_DB_SP then 
       Pri_At_SP = 1
     else
       Pri_At_SP = 0
     end
 
-    if DiffPress < DiffPress_Low_DB_SP then 
+    if Ctrl_Pri < Ctrl_Low_DB_SP then 
       Pri_Unload_req = 1
     else
       Pri_Unload_req = 0
     end
 
-    if DiffPress > DiffPress_High_DB_SP then 
+    if Ctrl_Pri > Ctrl_High_DB_SP then 
       Pri_Load_req = 1
     else
       Pri_Load_req = 0
@@ -96,19 +101,19 @@ if Man_Mode == 0 and SV_Auto_Control == 1 then
 
   else
 
-    if PT_102 > Dis_Press_Low_DB_SP and PT_102 < Dis_Press_High_DB_SP then
+    if Ctrl_Sec > Ctrl_Sec_Low_DB_SP and Ctrl_Sec < Ctrl_Sec_High_DB_SP then
       Sec_At_SP = 1
     else
       Sec_At_SP = 0
     end 
 
-    if PT_102 > Dis_Press_High_DB_SP then
+    if Ctrl_Sec > Ctrl_Sec_High_DB_SP then
       Sec_Unload_req = 1
     else
       Sec_Unload_req = 0
     end 
 
-    if PT_102 < Dis_Press_Low_DB_SP then
+    if Ctrl_Sec < Ctrl_Sec_Low_DB_SP then
       Sec_Load_req = 1
     else
       Sec_Load_req = 0
@@ -292,3 +297,5 @@ end
 --***************************************************
 --END of Slide Valve Control
 --***************************************************
+
+
