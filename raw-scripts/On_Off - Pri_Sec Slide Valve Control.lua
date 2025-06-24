@@ -156,7 +156,7 @@ if State >= 0 and State < 7 then
 		set_do_val(1,3,0)
 		set_sGbl("do1Pos",0)
 		set_sGbl("do3Pos",0)
-    local sw_tmr_0 = get_time()
+    sw_tmr_0 = get_time()
 	else
 		local sw = tonumber(get_sGbl("slide_wait",0))
 		if sw > 0 then
@@ -179,7 +179,7 @@ if State >= 9 then
 		set_do_val(1,3,0)
 		set_sGbl("do1Pos",0)
 		set_sGbl("do3Pos",0)
-    local sw_tmr_0 = get_time()
+    sw_tmr_0 = get_time()
 	else
 		local sw = tonumber(get_sGbl("slide_wait",0))
 		if sw > 0 then
@@ -209,7 +209,7 @@ if SV_Auto_Control == 1 then
       set_do_val(1,3,0)
       set_sGbl("do1Pos",0)
       set_sGbl("do3Pos",0)
-      local sw_tmr_0 = get_time()
+      sw_tmr_0 = get_time()
     else
       local sw = tonumber(get_sGbl("slide_wait",0))
       if sw > 0 then
@@ -229,7 +229,7 @@ if SV_Auto_Control == 1 then
       set_do_val(1,3,0)
       set_sGbl("do1Pos",0)
       set_sGbl("do3Pos",0)
-      local sw_tmr_0 = get_time()
+      sw_tmr_0 = get_time()
     else
       local sw = tonumber(get_sGbl("slide_wait",0))
       if sw > 0 then
@@ -257,7 +257,7 @@ if Man_Mode == 1 then
       set_do_val(1,3,0)
       set_sGbl("do1Pos",0)
       set_sGbl("do3Pos",0)
-      local sw_tmr_0 = get_time()
+      sw_tmr_0 = get_time()
     else
       local sw = tonumber(get_sGbl("slide_wait",0))
       if sw > 0 then
@@ -277,7 +277,7 @@ if Man_Mode == 1 then
       set_do_val(1,3,0)
       set_sGbl("do1Pos",0)
       set_sGbl("do3Pos",0)
-      local sw_tmr_0 = get_time()
+      sw_tmr_0 = get_time()
     else
       local sw = tonumber(get_sGbl("slide_wait",0))
       if sw > 0 then
@@ -297,5 +297,3 @@ end
 --***************************************************
 --END of Slide Valve Control
 --***************************************************
-
-
