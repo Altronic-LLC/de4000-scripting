@@ -1,5 +1,5 @@
   -- PID Auto / Manual Control 
-function ManAutoButton(Name,PID_Number,Increment,Enable_Manual)
+function AO_ManAutoButton(Name,PID_Number,Increment,Enable_Manual)
     if not get_sVirt(Name.."_FS") then
       set_sVirt(Name.."_FS",1)
       set_sVirt(Name.."_Mode","Auto")
@@ -11,7 +11,7 @@ function ManAutoButton(Name,PID_Number,Increment,Enable_Manual)
       set_sGbl("PID"..PID_Number.."Override",get_sVirt(Name.."_Manual_POS") )
     else
       set_sGbl("PID"..PID_Number.."Override",-1)
-      set_sVirt(Name.."_Manual_POS",get_sVirt("PID"..PID_Number.."Op",0))
+      set_sVirt(Name.."_Manual_POS",math.floor(get_sVirt("PID"..PID_Number.."Op",0)))
     end
     
     -- Manual Control 
@@ -37,7 +37,7 @@ function ManAutoButton(Name,PID_Number,Increment,Enable_Manual)
 end
 
 if State == 0 then
-	ManAutoButton("XC102 Process Valve",2,5,Maintenance_Active)
+	AO_ManAutoButton("XC102 Process Valve",2,5,Maintenance_Active)
 end
 
 if get_sVirt("XC102 Process Valve","Auto") == "Auto" then
