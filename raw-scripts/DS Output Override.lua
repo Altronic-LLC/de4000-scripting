@@ -1,6 +1,21 @@
 
 function DS_Output_Control(DS1,DS2,DS3,DS4)
-  local State = get_state()
+	function set_ctrl_do_override(ch, val)
+		set_sVirt("ctrl_do_override" .. ch, val)
+		if tonumber_def(get_sGbl("redis_ctrl"),0) ~= 1 then
+			set_ctrl_do_val(ch,val)
+		end
+	end
+
+	function set_ctrl_do(ch,val)
+		if tonumber_def(get_sVirt("ctrl_do_override" .. ch, 2) ~= 2) then
+			if tonumber_def(get_sGbl("redis_ctrl"),0) ~= 1 then
+			set_ctrl_do_val(ch,val)
+			end
+		end
+	end
+	
+  	local State = get_state()
 	local DS_ON = get_gbl("state"..State.."onChans")  -- e.g., "1,3,4"
 	local DS_OFF = get_gbl("state"..State.."offChans")  -- e.g., "1,3,4"
 	local StatesOn = {}
@@ -88,22 +103,7 @@ function DS_Output_Control(DS1,DS2,DS3,DS4)
 	if DS4 == 1 then set_ctrl_do_override(4,1) set_ctrl_do(4,1) else set_ctrl_do_override(4,0) set_ctrl_do(4,0) end
 end
 
---Here is the test script code
-function set_ctrl_do_override(ch, val)
-    set_sVirt("ctrl_do_override" .. ch, val)
-    if tonumber_def(get_sGbl("redis_ctrl"),0) ~= 1 then
-      set_ctrl_do_val(ch,val)
-    end
-end
 
-
-function set_ctrl_do(ch,val)
-  if tonumber_def(get_sVirt("ctrl_do_override" .. ch, 2) ~= 2) then
-    if tonumber_def(get_sGbl("redis_ctrl"),0) ~= 1 then
-      set_ctrl_do_val(ch,val)
-    end
-  end
-end
 
 
 set_sVirt("DS1_Master_State",DS1_Master_State)
