@@ -116,7 +116,7 @@ if DS2_Master_State == true then DS2_Master_Control = 1 else DS2_Master_Control 
 if DS3_Master_State == true then DS3_Master_Control = 1 else DS3_Master_Control = 0 end
 if DS4_Master_State == true then DS4_Master_Control = 1 else DS4_Master_Control = 0 end
 
-if get_state() == 5 then 
+if get_state() == 8 then 
 	if get_time() - Statetmr > 10 then 
 		DS1_Master_Control = 0
 		DS2_Master_Control = 0
