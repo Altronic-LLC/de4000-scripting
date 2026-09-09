@@ -1,6 +1,6 @@
 
 --[[ For eRCM faults if the index number is 22 then the result in Reg 40,017 = 17406
-        then if you do 17384 - 17406 = 22. Always subtract away 17384 from Reg 40017 to get the actual eRCM fault code.
+        then if you do 17406 - 17384 = 22. Always subtract away 17384 from Reg 40017 to get the actual eRCM fault code.
 ]]
     -- Custom Fault Splitting 
 function split16(value16)

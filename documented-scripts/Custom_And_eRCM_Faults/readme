@@ -1,0 +1,55 @@
+Description: Custom And eRCM Faults - indexing faults so Modbus register 40017 reports a
+    distinct value for each one.
+
+    Requires DE-4000 firmware 3.1.10 or later, and a Modbus Script containing the 40017
+    status register logic (see raw-scripts/Modbus_Custom_Faults.lua).
+
+    Copy the three functions at the top of Custom_And_eRCM_Faults.lua into the top of the
+    MASTER script. Then raise faults with custFault() and eRCMfault() instead of calling
+    customFault() with a bare string.
+
+    Called with only a fault string, customFault() defaults to fault type 9 and every custom
+    fault in the panel reports the same value (32768) in register 40017. A Modbus master can
+    see that a custom fault occurred but not which one. Passing a fault index fixes this:
+
+        custFault(faultString, index)   custom fault, type 9    40017 = 32768 + index
+                                        index range 1 - 16000
+
+        eRCMfault(faultString, index)   eRCM fault, type 24     40017 = 17384 + index
+                                        index range 1 - 1000
+
+    To read a value back: eRCM index = 40017 - 17384, custom index = 40017 - 32768.
+
+    * All eRCM faults must be indexed. Use the indexes from the published eRCM fault list
+      so every panel reports the same code for the same condition.
+    * Custom fault indexes are optional but strongly recommended on any panel monitored
+      over Modbus.
+    * customFault() is a shutdown, not an alarm, and only the first fault since the last
+      reset is reported in 40017.
+    * Avoid reserved system-fault wording in custom fault strings. See the warning block at
+      the bottom of the .lua file, and section 5 of 40017_Custom_and_eRCM_Faults.md.
+
+    Full explanation, value tables and worked examples: 40017_Custom_and_eRCM_Faults.md
+
+
+Rev 1.0 - Initial Release 09/09/2026
+
+
+Code Reference:
+----------------------------
+function split16(value16)
+  local high_byte = math.floor(value16 / 256)
+  local low_byte = value16 % 256
+  return high_byte, low_byte
+end
+
+function custFault(faultString, index)
+  local high,low = split16(index)
+  customFault(faultString,high,low,9)
+end
+
+function eRCMfault(faultString, index)
+  local high,low = split16(index)
+  customFault(faultString,high,low,24)
+end
+----------------------------
